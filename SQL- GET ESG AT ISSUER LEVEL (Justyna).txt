@@ -1,0 +1,231 @@
+Select 
+
+            t.valuation_date          "Bewertungsdatum", 
+            t.number_id               "FONDSNUMMER",
+            t.text                    "Fonds",
+            t.fund_volume             "Fondsvolumen",
+            t.currency_fund           "Fondswährung",
+
+            t.isin                    "ISIN",
+            t.id                      "Id",
+            t.ltext_wm                "Wertpapier",
+            t.currency                "Währung",
+            t.devisenkurs             "Devisenkurs",
+            t.einstandsdevisenkurs    "Einstandsdevisenkurs",
+            t.qty                     "Nominale/Stücke",
+            t.kurs                    "Kurs",
+            t.kurs_fondwhr           "Kurs Fondwhr.",
+            t.exposure                "Exposure",
+            t.kurswert_poswhrg        "Kurswert (lokal)",
+            t.kurswert_fondswhrg      "Kurswert Fondswhrg.",
+            t.accrued_interest_fund   "Stückzinsen (Fondswährung)",
+            t.accrued_interest_pos    "Stückzinsen (Positionswährung)",
+            t.kurswert_dirty          "Kurswert (dirty)",
+            t.guv                     "GuV",
+            t.guv_fx                  "GuV FX",
+            t.anteil_fv               "% am FV", 
+            t.anteil_av               "% an Assetklasse",
+            trim(t.msci_sector)       "Aktien Sektor",
+            trim(t.msci_subsector)    "Aktien Subsektor",
+            t.asset_level_i           "Asset Level I",
+            t.asset_level_ii          "Asset Level II",
+            t.exp_level_i             "Exposure Level I",
+            t.exp_level_ii            "Exposure Level II",
+            t.ui_rsector1             "Rentensektor I",
+            t.ui_rsector2             "Rentensektor II",
+--            t.IBOXX_SECTOR3           "Rentensektor III",
+--            trim(t.stoxx_sector)      "STOXX Sektor",
+            t.rating_ui_sp_text       "Rating",
+            t.rating_grade_text       "Rating Grade",
+            t.BOERSENNOTIERUNG        "Börsennotierung",
+            t.country                 "Land",
+            t.country_of_risk         "Land des wirtsch. Risikos", 
+
+
+            t.EMITTENT_1_ID           "Emittent-ID",
+            t.EMITTENT_LEI            "Emittent-LEI",           
+            t.EMITTENT_1              "Emittent",
+            t.EMITTENT_4_ID           "Konzern-ID",
+            t.KONZERN_LEI             "Konzern-LEI",
+            t.EMITTENT_4              "Konzern",     
+      --      WMNR.WMNR,
+      --      WMNR.ISSUER_ID,
+            coalesce(ESG.ISSUER_ID,ESG2.ISSUER_ID,ESGK.ISSUER_ID) ISSUER_ID,
+            coalesce(wmnr.issuer_lei,wmnr2.issuer_lei,wmnrK.issuer_lei) ISSUER_LEI,
+            coalesce(ESG.ESG_SCORE,ESG2.ESG_SCORE,ESGK.ESG_SCORE) ESG_SCORE,
+            ESG_FUND.FUND_WEIGHTED_AVG_ESG_SCORE,
+            ESG_FUND.FUND_ESG_COVERAGE_OVERALL,
+            ESG_FUND.FUND_WEIGHTED_AVG_CARBON_INTEN,
+            ESG_FUND.FUND_SFDR_CARBON_FOOTPRINT_COV,
+            coalesce(wmnr.WMNR,wmnr2.WMNR,wmnrK.WMNR) WMNR_WMNR,
+            t.SECURITY_SID,
+     --       WMNR.*,
+      --      WMNR2.*
+
+-- Tab 3: Deckblatt --- hier ergänzen----------
+       coalesce(ESG.EU_SI_GOOD_GOV_TEST,ESG2.EU_SI_GOOD_GOV_TEST,ESGK.EU_SI_GOOD_GOV_TEST)EU_SI_GOOD_GOV_TEST,
+       coalesce(ESG.EU_SI_POS_CONTR_TEST,ESG2.EU_SI_POS_CONTR_TEST,ESGK.EU_SI_POS_CONTR_TEST)EU_SI_POS_CONTR_TEST,
+       
+-- Tab 4: DNSH & PAI  -------hier ergänzen-----------
+       coalesce(ESG.EU_SI_DNSH_TEST,ESG2.EU_SI_DNSH_TEST,ESGK.EU_SI_DNSH_TEST)EU_SI_DNSH_TEST, 
+       coalesce(ESG.OVERALL_FLAG,ESG2.OVERALL_FLAG,ESGK.OVERALL_FLAG)OVERALL_FLAG,
+       coalesce(ESG.OECD_ALIGNMENT,ESG2.OECD_ALIGNMENT,ESGK.OECD_ALIGNMENT)OECD_ALIGNMENT,
+
+-- Tab 5: Nachhaltigk.Inv. & Sektoren       ---------hier ergänzen-----------
+              
+       GV727.GV727C, -- Teilfeld C; Nachhaltige Investitionen
+       coalesce(ESG.EU_SUSTAINABLE_INVESTMENT_SCREEN,ESG2.EU_SUSTAINABLE_INVESTMENT_SCREEN,ESGK.EU_SUSTAINABLE_INVESTMENT_SCREEN)EU_SUSTAINABLE_INVESTMENT_SCREEN, ---- Teilfeld C; Nachhaltige Investitionen
+       coalesce(ESG.EST_EU_TAXONOMY_MAX_REV,ESG2.EST_EU_TAXONOMY_MAX_REV,ESGK.EST_EU_TAXONOMY_MAX_REV)EST_EU_TAXONOMY_MAX_REV, ---- Taxonomiekonform
+       coalesce(ESG.REP_EU_TAXONOMY_REVENUE_ALIGNED,ESG2.REP_EU_TAXONOMY_REVENUE_ALIGNED,ESGK.REP_EU_TAXONOMY_REVENUE_ALIGNED)REP_EU_TAXONOMY_REVENUE_ALIGNED, ---- Taxonomiekonform
+       GV728.GV728C, -- Teilfeld C; Sonstige Umweltziele
+       coalesce(ESG.EU_SI_OTHER_ENV_IMPACT_REV,ESG2.EU_SI_OTHER_ENV_IMPACT_REV,ESGK.EU_SI_OTHER_ENV_IMPACT_REV)EU_SI_OTHER_ENV_IMPACT_REV, -- Teilfeld C; Sonstige Umweltziele
+       coalesce(ESG.EU_SI_ENV_IMPACT_REV,ESG2.EU_SI_ENV_IMPACT_REV,ESGK.EU_SI_ENV_IMPACT_REV)EU_SI_ENV_IMPACT_REV, -- Teilfeld C; Umwelt
+       GV729.GV729C, -- Teilfeld C; Soziales
+       coalesce(ESG.EU_SI_SOCIAL_IMPACT_REV,ESG2.EU_SI_SOCIAL_IMPACT_REV,ESGK.EU_SI_SOCIAL_IMPACT_REV)EU_SI_SOCIAL_IMPACT_REV, -- Teilfeld C; Soziales
+       t.NACE_CODE,
+       t.NACE_CLASS,
+       
+-- Tab 6: Taxonomie 
+
+
+ --    GV721 -- ==> Liste aus 6 Feldern ohne Werte
+       GV726.GV726C, -- Konformität Taxonomie mit Umweltzielen
+
+       
+       -- Taxonomiekonformität der Investitionen:
+       coalesce(ESG.REP_EU_TAXONOMY_ELIGIBLE_ALIGNED_GAS_TURNOVER,ESG2.REP_EU_TAXONOMY_ELIGIBLE_ALIGNED_GAS_TURNOVER,ESGK.REP_EU_TAXONOMY_ELIGIBLE_ALIGNED_GAS_TURNOVER)REP_EU_TAXONOMY_ELIGIBLE_ALIGNED_GAS_TURNOVER, -- Taxonomiekonform: Fossiles Gas 
+       coalesce(ESG.REP_EU_TAXONOMY_ELIGIBLE_ALIGNED_GAS_CAPEX,ESG2.REP_EU_TAXONOMY_ELIGIBLE_ALIGNED_GAS_CAPEX,ESGK.REP_EU_TAXONOMY_ELIGIBLE_ALIGNED_GAS_CAPEX)REP_EU_TAXONOMY_ELIGIBLE_ALIGNED_GAS_CAPEX, -- Taxonomiekonform: Fossiles Gas
+       coalesce(ESG.REP_EU_TAXONOMY_ELIGIBLE_ALIGNED_GAS_OPEX,ESG2.REP_EU_TAXONOMY_ELIGIBLE_ALIGNED_GAS_OPEX,ESGK.REP_EU_TAXONOMY_ELIGIBLE_ALIGNED_GAS_OPEX)REP_EU_TAXONOMY_ELIGIBLE_ALIGNED_GAS_OPEX, -- Taxonomiekonform: Fossiles Gas
+       coalesce(ESG.REP_EU_TAXONOMY_ELIGIBLE_ALIGNED_NUCLEAR_TURNOVER,ESG2.REP_EU_TAXONOMY_ELIGIBLE_ALIGNED_NUCLEAR_TURNOVER,ESGK.REP_EU_TAXONOMY_ELIGIBLE_ALIGNED_NUCLEAR_TURNOVER)REP_EU_TAXONOMY_ELIGIBLE_ALIGNED_NUCLEAR_TURNOVER, -- Taxonomiekonform: Kernenergie
+       coalesce(ESG.REP_EU_TAXONOMY_ELIGIBLE_ALIGNED_NUCLEAR_CAPEX,ESG2.REP_EU_TAXONOMY_ELIGIBLE_ALIGNED_NUCLEAR_CAPEX,ESGK.REP_EU_TAXONOMY_ELIGIBLE_ALIGNED_NUCLEAR_CAPEX)REP_EU_TAXONOMY_ELIGIBLE_ALIGNED_NUCLEAR_CAPEX, -- Taxonomiekonform: Kernenergie
+       coalesce(ESG.REP_EU_TAXONOMY_ELIGIBLE_ALIGNED_NUCLEAR_OPEX,ESG2.REP_EU_TAXONOMY_ELIGIBLE_ALIGNED_NUCLEAR_OPEX,ESGK.REP_EU_TAXONOMY_ELIGIBLE_ALIGNED_NUCLEAR_OPEX)REP_EU_TAXONOMY_ELIGIBLE_ALIGNED_NUCLEAR_OPEX, -- Taxonomiekonform: Kernenergie
+       coalesce(ESG.REP_EU_TAXONOMY_REVENUE_ALIGNED,ESG2.REP_EU_TAXONOMY_REVENUE_ALIGNED,ESGK.REP_EU_TAXONOMY_REVENUE_ALIGNED)REP_EU_TAXONOMY_REVENUE_ALIGNED, -- Taxonomiekonform: ohne fossiles Gas und Kernenergie
+       coalesce(ESG.REP_EU_TAXONOMY_CAPEX_ALIGNED,ESG2.REP_EU_TAXONOMY_CAPEX_ALIGNED,ESGK.REP_EU_TAXONOMY_CAPEX_ALIGNED)REP_EU_TAXONOMY_CAPEX_ALIGNED, -- Taxonomiekonform: ohne fossiles Gas und Kernenergie
+       coalesce(ESG.REP_EU_TAXONOMY_OPEX_ALIGNED,ESG2.REP_EU_TAXONOMY_OPEX_ALIGNED,ESGK.REP_EU_TAXONOMY_OPEX_ALIGNED)REP_EU_TAXONOMY_OPEX_ALIGNED, -- Taxonomiekonform: ohne fossiles Gas und Kernenergie
+       coalesce(ESG.REP_EU_TAXONOMY_NON_FIN_TOTAL_NON_ALIGNED_TURNOVER,ESG2.REP_EU_TAXONOMY_NON_FIN_TOTAL_NON_ALIGNED_TURNOVER,ESGK.REP_EU_TAXONOMY_NON_FIN_TOTAL_NON_ALIGNED_TURNOVER)REP_EU_TAXONOMY_NON_FIN_TOTAL_NON_ALIGNED_TURNOVER, -- Taxonomiekonform: Nicht taxonomiekonform
+       coalesce(ESG.REP_EU_TAXONOMY_NON_FIN_TOTAL_NON_ALIGNED_CAPEX,ESG2.REP_EU_TAXONOMY_NON_FIN_TOTAL_NON_ALIGNED_CAPEX,ESGK.REP_EU_TAXONOMY_NON_FIN_TOTAL_NON_ALIGNED_CAPEX)REP_EU_TAXONOMY_NON_FIN_TOTAL_NON_ALIGNED_CAPEX, -- Taxonomiekonform: Nicht taxonomiekonform
+       coalesce(ESG.REP_EU_TAXONOMY_NON_FIN_TOTAL_NON_ALIGNED_OPEX,ESG2.REP_EU_TAXONOMY_NON_FIN_TOTAL_NON_ALIGNED_OPEX,ESGK.REP_EU_TAXONOMY_NON_FIN_TOTAL_NON_ALIGNED_OPEX)REP_EU_TAXONOMY_NON_FIN_TOTAL_NON_ALIGNED_OPEX, -- Taxonomiekonform: Nicht taxonomiekonform
+       
+       GV723.GV723C, -- Anteil Übergang
+       coalesce(ESG.REP_EU_TAXONOMY_TRANSITION_ALIGNED,ESG2.REP_EU_TAXONOMY_TRANSITION_ALIGNED,ESGK.REP_EU_TAXONOMY_TRANSITION_ALIGNED)REP_EU_TAXONOMY_TRANSITION_ALIGNED, -- Anteil Übergang
+       coalesce(ESG.REP_EU_TAXONOMY_CAPEX_TOTAL_ALIGNED_TRANSITION,ESG2.REP_EU_TAXONOMY_CAPEX_TOTAL_ALIGNED_TRANSITION,ESGK.REP_EU_TAXONOMY_CAPEX_TOTAL_ALIGNED_TRANSITION)REP_EU_TAXONOMY_CAPEX_TOTAL_ALIGNED_TRANSITION, -- Anteil Übergang
+       coalesce(ESG.REP_EU_TAXONOMY_OPEX_ALIGNED_TRANSITION,ESG2.REP_EU_TAXONOMY_OPEX_ALIGNED_TRANSITION,ESGK.REP_EU_TAXONOMY_OPEX_ALIGNED_TRANSITION)REP_EU_TAXONOMY_OPEX_ALIGNED_TRANSITION, -- Anteil Übergang
+       
+       GV722.GV722C, -- Anteil Ermöglichend -- Taxonomiekonform: Fossiles Gas
+       coalesce(ESG.REP_EU_TAXONOMY_ENABLE_ALIGNED,ESG2.REP_EU_TAXONOMY_ENABLE_ALIGNED,ESGK.REP_EU_TAXONOMY_ENABLE_ALIGNED)REP_EU_TAXONOMY_ENABLE_ALIGNED, -- Anteil Ermöglichend
+       coalesce(ESG.REP_EU_TAXONOMY_CAPEX_TOTAL_ALIGNED_ENABLE,ESG2.REP_EU_TAXONOMY_CAPEX_TOTAL_ALIGNED_ENABLE,ESGK.REP_EU_TAXONOMY_CAPEX_TOTAL_ALIGNED_ENABLE)REP_EU_TAXONOMY_CAPEX_TOTAL_ALIGNED_ENABLE, -- Anteil Ermöglichend
+       coalesce(ESG.REP_EU_TAXONOMY_OPEX_ALIGNED_ENABLE,ESG2.REP_EU_TAXONOMY_OPEX_ALIGNED_ENABLE,ESGK.REP_EU_TAXONOMY_OPEX_ALIGNED_ENABLE)REP_EU_TAXONOMY_OPEX_ALIGNED_ENABLE -- Anteil Ermöglichend
+       
+
+ --      t.*
+
+FROM --TABLE
+       (
+        with        
+                PARAMS as (select kz.valuation_date as FONDS_DATE, to_char(dodfs.sid) as FONDS_SID from d_fonds_stamm dodfs inner join f_kennzahlen kz on kz.parent_sid = dodfs.sid 
+                           where dodfs.id in ('141900') --here insert the parameter for the FUND_ID
+                           and kz.valuation_date in ('15.03.2024'))--here insert the parameter for VALUATION_DATE
+                select  * 
+                from    PARAMS
+                left join TABLE(datafeeds_esuite.get_my_AllocationData      (PARAMS.fonds_sid,  -- Fonds (dodfs.id)
+                                                                             PARAMS.fonds_date, -- Valuation Date (kz.valuation_date)
+                                                                             0,
+                                                                             0,
+                                                                             0,
+                                                                             'de',              -- Language
+                                                                             0                  -- Fund Lookthrough
+                                                                             )) get_my_AllocationData on 1=1
+                                                                             ) t
+
+left join IDWH_D_MSCI_ESG_ISSUER_WMNR WMNR on (WMNR.ISSUER_LEI = t.EMITTENT_LEI and WMNR.WMNR = t.EMITTENT_1_ID) 
+                                        
+                                        and WMNR.SOURCE = '1'
+                                 --       and WMNR.CREATED_BY = 'rauth'
+                                        and (WMNR.STATUS_LEI = '1' OR WMNR.STATUS_ISIN = '1')
+                                        and coalesce(WMNR.SUBORDINATED,5) = 5
+                                        and WMNR.INAKTIV_DAT is null
+                                     --   and (WMNR.CHANGED_BY <> 'set_inactive' OR WMNR.CHANGED_BY is null) -- 661725
+
+left join IDWH_D_MSCI_ESG_ISSUER_WMNR WMNR2 on (WMNR2.WMNR = t.EMITTENT_1_ID and WMNR2.ISSUER_LEI is null)
+                                        
+                                        and WMNR2.SOURCE = '1'
+                                 --       and WMNR.CREATED_BY = 'rauth'
+                                        and WMNR2.STATUS_ISIN = '1'
+                                        and WMNR2.STATUS_LEI is null
+                                        and WMNR2.SUBORDINATED is null
+                                        and WMNR2.INAKTIV_DAT is null
+                                        and (WMNR2.CHANGED_BY <> 'set_inactive' OR WMNR2.CHANGED_BY is null) -- 661725
+
+
+left join IDWH_D_MSCI_ESG_ISSUER_WMNR WMNRK on WMNRK.ISSUER_LEI = t.KONZERN_LEI  
+                                        and WMNRK.WMNR = t.EMITTENT_4_ID 
+                                        and WMNRK.SOURCE = '1'
+                                  --      and WMNRK.CREATED_BY = 'rauth'
+                                        and WMNRK.STATUS_LEI = '1'
+                                        and coalesce(WMNRK.SUBORDINATED,5) = 5 -- w/ 402490
+                                        and WMNRK.INAKTIV_DAT is null
+                                   --     and (WMNR2.CHANGED_BY <> 'set_inactive' OR WMNR2.CHANGED_BY is null)
+
+left join MSCIESG_BASE_PIVOT_MV ESG on ESG.ISSUER_ID = WMNR.ISSUER_ID
+                                and t.valuation_date >= esg.valid_from
+                                and t.valuation_date < coalesce(esg.valid_to,TO_DATE ('31.12.9999', 'dd.mm.yyyy'))  
+                                --and t.valuation_date < esg.valid_to
+
+left join MSCIESG_BASE_PIVOT_MV ESG2 on ESG2.ISSUER_ID = WMNR2.ISSUER_ID
+                                and t.valuation_date >= esg2.valid_from
+                                and t.valuation_date < coalesce(esg2.valid_to,TO_DATE ('31.12.9999', 'dd.mm.yyyy'))  
+                                --and t.valuation_date < esg.valid_to
+
+left join MSCIESG_BASE_PIVOT_MV ESGK on ESGK.ISSUER_ID = WMNRK.ISSUER_ID
+                                and t.valuation_date >= esgK.valid_from
+                                and t.valuation_date < coalesce(esgK.valid_to,TO_DATE ('31.12.9999', 'dd.mm.yyyy'))  
+                                --and t.valuation_date < esgK.valid_to
+
+left join MSCIESG_FUND_BASE_PIVOT_MV ESG_FUND on ESG_FUND.FUND_ISIN = t.ISIN --- is this fund level----------
+                                and t.valuation_date >= ESG_FUND.valid_from
+                                and t.valuation_date < coalesce(ESG_FUND.valid_to,TO_DATE ('31.12.9999', 'dd.mm.yyyy'))  
+                             
+
+/*
+left join IDWH_D_MSCI_ESG_RATING ERAT on ERAT.ID =  ESG.ESG_RATING_ID 
+                                            and ERAT.IS_ACTIVE = '1'
+*/
+
+
+LEFT JOIN FT_GV721 GV721 on t.security_sid = gv721.security_sid
+                        and t.valuation_date >= gv721.SECURITY_VALID_FROM
+                        and t.valuation_date < gv721.SECURITY_VALID_UNTIL
+
+LEFT JOIN FT_GV726 GV726 on t.security_sid = gv726.security_sid
+                        and t.valuation_date >= gv726.SECURITY_VALID_FROM
+                        and t.valuation_date < gv726.SECURITY_VALID_UNTIL
+
+LEFT JOIN FT_GV723 GV723 on t.security_sid = gv723.security_sid
+                        and t.valuation_date >= gv723.SECURITY_VALID_FROM
+                        and t.valuation_date < gv723.SECURITY_VALID_UNTIL
+
+LEFT JOIN FT_GV722 GV722 on t.security_sid = gv722.security_sid
+                        and t.valuation_date >= gv722.SECURITY_VALID_FROM
+                        and t.valuation_date < gv722.SECURITY_VALID_UNTIL
+
+LEFT JOIN FT_GV727 GV727 on t.security_sid = gv727.security_sid
+                        and t.valuation_date >= gv727.SECURITY_VALID_FROM
+                        and t.valuation_date < gv727.SECURITY_VALID_UNTIL
+
+LEFT JOIN FT_GV728 GV728 on t.security_sid = gv728.security_sid
+                        and t.valuation_date >= gv728.SECURITY_VALID_FROM
+                        and t.valuation_date < gv728.SECURITY_VALID_UNTIL
+
+LEFT JOIN FT_GV729 GV729 on t.security_sid = gv729.security_sid
+                        and t.valuation_date >= gv729.SECURITY_VALID_FROM
+                        and t.valuation_date < gv729.SECURITY_VALID_UNTIL
+                        
+where 1=1
+--and ESG.ESG_SCORE is null
+and t.asset_level_i = 'Wertpapiere'
+--and t.id = 'FR0000130809'
+
+order by 
+t.valuation_date,
+t.number_id, 
+t.ISIN;
